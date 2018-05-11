@@ -1,0 +1,18 @@
+{
+  "name": "geoplayground",
+  "description": "Implementations of geometric algorithms",
+  "version": "0.0.1",
+  "dependencies": {
+    "open": "0.0.3",
+    "buckets-js": "1.98.2"
+  },
+  "devDependencies": {
+    "mocha": "~5.1.1",
+    "supervisor": "~0.5.2"
+  },
+  "scripts": {
+    "autotest": "supervisor -q -n exit -x mocha -- -b",
+    "test": "mocha",
+    "visualizer": "node devlib/visualizer.js"
+  }
+}
