@@ -18,40 +18,38 @@ describe('rbtree1', function() {
     assert.equal(false, tree.put(3, 42))
     assert.equal(true, tree.contains(3));
     assert.equal(42, tree.get(3));
+  });
+
+  it('should allow item updates', function() {
+    var tree = rbtree.makeTree();
+    assert.equal(false, tree.put(3, 42))
+    assert.equal(true, tree.put(3, 52));
+    assert.equal(52, tree.get(3));
+  });
+
+  it('should allow a custom comparator', function() {
+    var makeKey = function(x) {
+      return { key: x };
+    }
+
+    var compareKeys = function(a, b) {
+      if (a.key < b.key) {
+        return -1;
+      } else if (a.key > b.key) {
+        return 1;
+      } else {
+        return 0;
+      }
+    }
 
 
+    var tree = rbtree.makeTree(compareKeys);
+    assert.equal(false, tree.put(makeKey(1), 'A'));
+    assert.equal(false, tree.put(makeKey(3), 'C'));
+    assert.equal(false, tree.put(makeKey(2), 'B'));
+    assert.equal(false, tree.put(makeKey(4), 'D'));
+    assert.equal(false, tree.put(makeKey(5), 'E'));
+
+    assert.equal('E', tree.get(makeKey(5)));
   })
-
 })
-
-
-// var assert = require('assert');
-// var geoprizm = require('../lib/geoprizm.js');
-//
-// describe('intersection', function() {
-//   it('should', function() {
-//     assert.equal(2, 2);
-//   });
-//
-//   it ('should find no intersections for an empty set', function() {
-//     segments = [[{x:0, y:0}, {x:0, y:1}]]
-//     var a = geoprizm.findIntersections([], segments);
-//     var b = geoprizm.findIntersections(segments, []);
-//     assert.deepEqual([], a);
-//     assert.deepEqual([], b);
-//   });
-//
-//   it ('should find an intersection between sets', function() {
-//     seta = [[{x:0, y: 1}, {x: 2, y: 1}]];
-//     setb = [[{x:1, y: 0}, {x: 1, y: 2}]];
-//
-//     expected = {
-//       segments: [seta[0], setb[0]],
-//       point: {x: 1, y: 1}
-//     };
-//
-//     var actual = geoprizm.findIntersections(seta, setb);
-//
-//     assert.deepEqual(expected, actual);
-//   });
-// })
