@@ -1,5 +1,8 @@
-var assert = require('assert');
-var rbtree = require('../lib/rbtree1.js');
+const assert = require('assert');
+const rbtree = require('../lib/rbtree1.js');
+const { gen } = require('testcheck');
+require('mocha-testcheck').install();
+
 
 describe('rbtree1', function() {
   it('should', function() {
@@ -26,6 +29,33 @@ describe('rbtree1', function() {
     assert.equal(true, tree.put(3, 52));
     assert.equal(52, tree.get(3));
   });
+
+  it('should pass this test', () => {
+    const included_stuff = [ -3, 0, 1, -1, -2 ];
+    const tree = rbtree.makeTree();
+    debugger;
+    for (let x of included_stuff) {
+      tree.put(x, x);
+    }
+
+    assert.equal(tree.contains(-1), true);
+
+  });
+
+  check.it('should contain everything that has been inserted', gen.array(gen.int), gen.array(gen.int), (included_stuff, all_stuff) => {
+    const tree = rbtree.makeTree();
+    for (let x of included_stuff) {
+      tree.put(x, x);
+    }
+
+    for (let y of all_stuff) {
+      if (included_stuff.includes(y)) {
+        assert.equal(tree.contains(y), true);
+      } else {
+        assert.equal(tree.contains(y), false);
+      }
+    }
+  })
 
   it('should allow a custom comparator', function() {
     var makeKey = function(x) {
