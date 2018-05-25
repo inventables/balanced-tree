@@ -34,8 +34,6 @@ describe('rbtree3', function() {
     const tree = rbtree.makeTree();
     tree.put(0, 0);
     tree.put(-3, -3);
-    debugger;
-
     assert.equal(tree.contains(-3), true);
 
   });
