@@ -14,7 +14,6 @@
   },
   "scripts": {
     "autotest": "supervisor -q -n exit -x mocha -- -b",
-    "test": "mocha",
-    "visualizer": "node devlib/visualizer.js"
+    "test": "mocha"
   }
 }
