@@ -1,10 +1,10 @@
 const assert = require('assert');
-const rbtree = require('../lib/rbtree1.js');
+const rbtree = require('../lib/rbtree2.js');
 const { gen } = require('testcheck');
 require('mocha-testcheck').install();
 
 
-describe('rbtree1', function() {
+describe('rbtree2', function() {
   it('should', function() {
     assert.equal(2, 2);
   });
@@ -31,13 +31,13 @@ describe('rbtree1', function() {
   });
 
   it('should pass this test', () => {
-    const included_stuff = [ -3, 0, 1, -1, -2 ];
     const tree = rbtree.makeTree();
-    for (let x of included_stuff) {
-      tree.put(x, x);
-    }
+    tree.put(0, 0);
+    tree.put(-3, -3);
+    tree.put(2, 2);
+    tree.put(1, 1);
 
-    assert.equal(tree.contains(-1), true);
+    assert.equal(tree.contains(-3), true);
 
   });
 
