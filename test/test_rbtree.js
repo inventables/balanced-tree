@@ -41,20 +41,39 @@ describe('rbtree', function() {
 
   });
 
-  check.it('should contain everything that has been inserted', gen.array(gen.int), gen.array(gen.int), (included_stuff, all_stuff) => {
+  it('should find the next value', () => {
+    const included_stuff = [ 1, 2, 3, 4, 5, 6, 7, 8, 9];
     const tree = rbtree.makeTree();
+
     for (let x of included_stuff) {
       tree.put(x, x);
     }
 
-    for (let y of all_stuff) {
-      if (included_stuff.includes(y)) {
-        assert.equal(tree.contains(y), true);
-      } else {
-        assert.equal(tree.contains(y), false);
-      }
+    assert.deepEqual(tree.successor(5), { key: 6, value: 6});
+  });
+
+  it('should return null when there is no next value', () => {
+    const included_stuff = [ 1, 2, 3];
+    const tree = rbtree.makeTree();
+
+    for (let x of included_stuff) {
+      tree.put(x, x);
     }
-  })
+
+    assert.equal(tree.successor(5), null);
+  });
+
+
+  it('should return the first value when getting the next value for something smaller than the smallest', () => {
+    const included_stuff = [ 7, 10, 12];
+    const tree = rbtree.makeTree();
+
+    for (let x of included_stuff) {
+      tree.put(x, x);
+    }
+
+    assert.deepEqual(tree.successor(5), {key: 7, value: 7});
+  });
 
   it('should allow a custom comparator', function() {
     var makeKey = function(x) {
@@ -81,4 +100,21 @@ describe('rbtree', function() {
 
     assert.equal('E', tree.get(makeKey(5)));
   })
+
+  check.it('should contain everything that has been inserted', gen.array(gen.int), gen.array(gen.int), (included_stuff, all_stuff) => {
+    const tree = rbtree.makeTree();
+    for (let x of included_stuff) {
+      tree.put(x, x);
+    }
+
+    for (let y of all_stuff) {
+      if (included_stuff.includes(y)) {
+        assert.equal(tree.contains(y), true);
+      } else {
+        assert.equal(tree.contains(y), false);
+      }
+    }
+  })
+
+
 })
