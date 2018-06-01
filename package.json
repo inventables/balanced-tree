@@ -2,10 +2,7 @@
   "name": "red-black-tree",
   "description": "Red-Black Tree implementation, as described in Introduction to Algorithms (CLR)",
   "version": "0.0.1",
-  "dependencies": {
-    "open": "0.0.3",
-    "buckets-js": "1.98.2"
-  },
+  "dependencies": {},
   "devDependencies": {
     "mocha": "~5.1.1",
     "supervisor": "~0.5.2",
