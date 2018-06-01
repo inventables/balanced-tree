@@ -41,18 +41,6 @@ describe('rbtree', function() {
     assert.deepEqual(tree.successor(5), { key: 6, value: 6});
   });
 
-  it('should pass this test', () => {
-    const included_stuff = [ 0, 2];
-    const tree = rbtree.makeTree();
-
-    for (let x of included_stuff) {
-      tree.put(x, x);
-    }
-
-    assert.deepEqual(tree.successor(0), { key: 2, value: 2});
-  });
-
-
   it('should return null when there is no next value', () => {
     const included_stuff = [ 1, 2, 3];
     const tree = rbtree.makeTree();
@@ -75,6 +63,17 @@ describe('rbtree', function() {
 
     assert.deepEqual(tree.successor(5), {key: 7, value: 7});
   });
+
+  it('should return the last value when getting the previous value for something larger than the largest', () => {
+    const included_stuff = [ 7, 10, 12];
+    const tree = rbtree.makeTree();
+
+    for (let x of included_stuff) {
+      tree.put(x, x);
+    }
+    assert.deepEqual(tree.predecessor(20), {key: 12, value: 12});
+  });
+
 
   it('should allow a custom comparator', function() {
     var makeKey = function(x) {
@@ -123,7 +122,6 @@ describe('rbtree', function() {
       tree.put(x, x);
     }
 
-
     let sorted_stuff = Array.from(new Set(values)).sort((a, b) => a - b);
     let successors = {}
     for (let i = 1; i < sorted_stuff.length; i++) {
@@ -139,7 +137,30 @@ describe('rbtree', function() {
         assert.equal(tree.successor(x), null);
       }
     }
-  })
+  });
+
+  check.it('should always return the predecessor', gen.array(gen.int), (values) => {
+    const tree = rbtree.makeTree();
+    for (let x of values) {
+      tree.put(x, x);
+    }
+
+    let sorted_stuff = Array.from(new Set(values)).sort((a, b) => b - a);
+    let predecessors = {}
+    for (let i = 1; i < sorted_stuff.length; i++) {
+      predecessors[sorted_stuff[i - 1]] = sorted_stuff[i];
+    }
+
+    for (let x of values) {
+      if (predecessors[x] != null) {
+        assert.deepEqual(tree.predecessor(x), { value: predecessors[x], key: predecessors[x]})
+      } else if (x > sorted_stuff[0]) {
+        assert.deepEqual(tree.predecessor(x), { value: sorted_stuff[0], key: sorted_stuff[0]})
+      } else {
+        assert.equal(tree.predecessor(x), null);
+      }
+    }
+  });
 
 
 })
