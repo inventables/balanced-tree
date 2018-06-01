@@ -163,4 +163,34 @@ describe('rbtree', function() {
   });
 
 
+  check.it('should always return the first node for head', gen.array(gen.int), (values) => {
+    const tree = rbtree.makeTree();
+    for (let x of values) {
+      tree.put(x, x);
+    }
+
+    let sorted_stuff = Array.from(new Set(values)).sort((a, b) => a - b);
+
+    if (values.length > 0) {
+      assert.deepEqual(tree.head(), { value: sorted_stuff[0], key: sorted_stuff[0]})
+    } else {
+      assert.equal(tree.head(), null);
+    }
+  });
+
+  check.it('should always return the last node for tail', gen.array(gen.int), (values) => {
+    const tree = rbtree.makeTree();
+    for (let x of values) {
+      tree.put(x, x);
+    }
+
+    let sorted_stuff = Array.from(new Set(values)).sort((a, b) => b - a);
+
+    if (values.length > 0) {
+      assert.deepEqual(tree.tail(), { value: sorted_stuff[0], key: sorted_stuff[0]})
+    } else {
+      assert.equal(tree.tail(), null);
+    }
+  });
+
 })
