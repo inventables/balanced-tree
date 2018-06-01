@@ -30,17 +30,6 @@ describe('rbtree', function() {
     assert.equal(52, tree.get(3));
   });
 
-  it('should pass this test', () => {
-    const included_stuff = [ -3, 0, 1, -1, -2 ];
-    const tree = rbtree.makeTree();
-    for (let x of included_stuff) {
-      tree.put(x, x);
-    }
-
-    assert.equal(tree.contains(-1), true);
-
-  });
-
   it('should find the next value', () => {
     const included_stuff = [ 1, 2, 3, 4, 5, 6, 7, 8, 9];
     const tree = rbtree.makeTree();
@@ -51,6 +40,18 @@ describe('rbtree', function() {
 
     assert.deepEqual(tree.successor(5), { key: 6, value: 6});
   });
+
+  it('should pass this test', () => {
+    const included_stuff = [ 0, 2];
+    const tree = rbtree.makeTree();
+
+    for (let x of included_stuff) {
+      tree.put(x, x);
+    }
+
+    assert.deepEqual(tree.successor(0), { key: 2, value: 2});
+  });
+
 
   it('should return null when there is no next value', () => {
     const included_stuff = [ 1, 2, 3];
@@ -112,6 +113,30 @@ describe('rbtree', function() {
         assert.equal(tree.contains(y), true);
       } else {
         assert.equal(tree.contains(y), false);
+      }
+    }
+  })
+
+  check.it('should always return the successor', gen.array(gen.int), (values) => {
+    const tree = rbtree.makeTree();
+    for (let x of values) {
+      tree.put(x, x);
+    }
+
+
+    let sorted_stuff = Array.from(new Set(values)).sort((a, b) => a - b);
+    let successors = {}
+    for (let i = 1; i < sorted_stuff.length; i++) {
+      successors[sorted_stuff[i - 1]] = sorted_stuff[i];
+    }
+
+    for (let x of values) {
+      if (successors[x] != null) {
+        assert.deepEqual(tree.successor(x), { value: successors[x], key: successors[x]})
+      } else if (x < sorted_stuff[0]) {
+        assert.deepEqual(tree.successor(x), { value: sorted_stuff[0], key: sorted_stuff[0]})
+      } else {
+        assert.equal(tree.successor(x), null);
       }
     }
   })
