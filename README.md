@@ -1,7 +1,7 @@
 
 # Balanced tree
 
-## A Javascript Red-Black-Tree implementation
+A Javascript Red-Black-Tree implementation
 
 ## Usage
 
@@ -75,7 +75,7 @@ To debug them, put a `debugger;` statement where you'd like to break, then run:
 `mocha --inspect-brk`. Finally, open up chrome://inspect to debug the tests in the devtools. 
 
 
-# Benchmarking
+## Benchmarking
 
 Bechmarking code is available at
 https://jsperf.com/js-rb-tree-1
