@@ -1,6 +1,6 @@
 {
-  "name": "geoplayground",
-  "description": "Implementations of geometric algorithms",
+  "name": "red-black-tree",
+  "description": "Red-Black Tree implementation, as described in Introduction to Algorithms (CLR)",
   "version": "0.0.1",
   "dependencies": {
     "open": "0.0.3",

@@ -1,10 +1,10 @@
 const assert = require('assert');
-const rbtree = require('../lib/rbtree1.js');
+const rbtree = require('../lib/rbtree.js');
 const { gen } = require('testcheck');
 require('mocha-testcheck').install();
 
 
-describe('rbtree1', function() {
+describe('rbtree', function() {
   it('should', function() {
     assert.equal(2, 2);
   });
