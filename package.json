@@ -1,5 +1,5 @@
 {
-  "name": "red-black-tree",
+  "name": "balanced-tree",
   "description": "Red-Black Tree implementation, as described in Introduction to Algorithms (CLR)",
   "version": "0.0.1",
   "dependencies": {},
