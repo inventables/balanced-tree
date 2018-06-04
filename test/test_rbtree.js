@@ -5,10 +5,6 @@ require('mocha-testcheck').install();
 
 
 describe('rbtree', function() {
-  it('should', function() {
-    assert.equal(2, 2);
-  });
-
 
   it('should return null for an empty tree', function() {
     var tree = rbtree.makeTree();
@@ -192,5 +188,23 @@ describe('rbtree', function() {
       assert.equal(tree.tail(), null);
     }
   });
+
+  check.it('should always traverse nodes in order', gen.array(gen.int), (values) => {
+    const tree = rbtree.makeTree();
+    for (let x of values) {
+      tree.put(x, x);
+    }
+
+    let sorted_stuff = Array.from(new Set(values)).sort((a, b) => a - b);
+
+    keys = []
+    values = []
+    tree.forEach((key, value) => { keys.push(key); values.push(value) });
+
+    assert.deepEqual(keys, sorted_stuff);
+    assert.deepEqual(values, sorted_stuff);
+
+  });
+
 
 })
