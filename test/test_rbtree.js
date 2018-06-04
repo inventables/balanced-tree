@@ -206,5 +206,23 @@ describe('rbtree', function() {
 
   });
 
+  // it('should allow deletion during iteration', function() {
+  //   const tree = rbtree.makeTree();
+  //   tree.put(1, 1);
+  //   tree.put(2, 2);
+  //   tree.put(3, 3);
+  //
+  //   results = [];
+  //
+  //   tree.forEach((key, value, deleteFn) => {
+  //     if (key == 2) {
+  //       deleteFn();
+  //     }
+  //     tree.forEach((key) => { results.push(key); });
+  //   })
+  //
+  //   assert.deepEqual([1,3], results);
+  // });
+  //
 
 })
