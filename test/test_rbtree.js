@@ -206,6 +206,25 @@ describe('rbtree', function() {
 
   });
 
+  it('should allow stopping during iteration', function() {
+    const tree = rbtree.makeTree();
+    tree.put(1, 1);
+    tree.put(2, 2);
+    tree.put(3, 3);
+
+    results = [];
+
+    tree.forEach((key, value, fns) => {
+      results.push(key);
+      if (key == 2) {
+        fns.stop()
+      }
+    })
+
+    assert.deepEqual([1,2], results);
+  });
+
+
   // it('should allow deletion during iteration', function() {
   //   const tree = rbtree.makeTree();
   //   tree.put(1, 1);
@@ -214,9 +233,9 @@ describe('rbtree', function() {
   //
   //   results = [];
   //
-  //   tree.forEach((key, value, deleteFn) => {
+  //   tree.forEach((key, value, fns) => {
   //     if (key == 2) {
-  //       deleteFn();
+  //       fns.delete()
   //     }
   //     tree.forEach((key) => { results.push(key); });
   //   })
