@@ -224,24 +224,44 @@ describe('rbtree', function() {
     assert.deepEqual([1,2], results);
   });
 
+  check.it('should allow deletion', gen.array(gen.int), gen.array(gen.int), (values, toDelete) => {
+    const tree = rbtree.makeTree();
+    for (let x of values) {
+      tree.put(x, x);
+    }
 
-  // it('should allow deletion during iteration', function() {
-  //   const tree = rbtree.makeTree();
-  //   tree.put(1, 1);
-  //   tree.put(2, 2);
-  //   tree.put(3, 3);
-  //
-  //   results = [];
-  //
-  //   tree.forEach((key, value, fns) => {
-  //     if (key == 2) {
-  //       fns.delete()
-  //     }
-  //     tree.forEach((key) => { results.push(key); });
-  //   })
-  //
-  //   assert.deepEqual([1,3], results);
-  // });
-  //
+    for (let x of toDelete) {
+      tree.remove(x);
+    }
+
+    for (let x of values) {
+      if (toDelete.includes(x)) {
+        assert.equal(tree.contains(x), false);
+      } else {
+        assert.equal(tree.contains(x), true);
+      }
+    }
+  });
+
+
+
+  it('should allow deletion during iteration', function() {
+    const tree = rbtree.makeTree();
+    tree.put(1, 1);
+    tree.put(2, 2);
+    tree.put(3, 3);
+
+    results = [];
+
+    tree.forEach((key, value, fns) => {
+      if (key == 2) {
+        fns.remove()
+        tree.forEach((key) => { results.push(key); });
+      }
+    })
+
+    assert.deepEqual([1,3], results);
+  });
+
 
 })
