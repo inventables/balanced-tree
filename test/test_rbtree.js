@@ -224,14 +224,105 @@ describe('rbtree', function() {
     assert.deepEqual([1,2], results);
   });
 
+  it('should passs this test - a', function() {
+    values = [ -1, 1, 0, 2, 3, -2, 4, 5, 6 ];
+    toDelete = [ 0 ];
+    const tree = rbtree.makeTree();
+    for (let x of values) {
+      tree.put(x, x);
+      assert.equal(tree.isBalanced(), true);
+    }
+  
+    tree.remove(0);    
+    assert.equal(tree.isBalanced(), true);
+    for (let x of values) {
+      if (toDelete.includes(x)) {
+        assert.equal(tree.contains(x), false);
+      } else {
+        assert.equal(tree.contains(x), true);
+      }
+    }
+  });
+  
+  it('should pass this test - b', function() {
+    values =  [ -2, 0, -1, 1, 2, 3, 21 ];
+    toDelete = [ 21, 0 ];
+    const tree = rbtree.makeTree();
+    for (let x of values) {
+      tree.put(x, x);
+      assert.equal(tree.isBalanced(), true);
+    }
+  
+    tree.remove(21);    
+    assert.equal(tree.isBalanced(), true);
+    tree.remove(0);    
+    assert.equal(tree.isBalanced(), true);
+    for (let x of values) {
+      if (toDelete.includes(x)) {
+        assert.equal(tree.contains(x), false);
+      } else {
+        assert.equal(tree.contains(x), true);
+      }
+    }
+  });
+
+  it('should pass this test - d', function() {
+    values =  [ 1, 2, -1, -2, 0, -3 ];
+    toDelete = [ 1 ];
+    const tree = rbtree.makeTree();
+    for (let x of values) {
+      tree.put(x, x);
+      assert.equal(tree.isBalanced(), true);
+    }
+  
+    tree.remove(1);    
+    assert.equal(tree.isBalanced(), true);
+    for (let x of values) {
+      if (toDelete.includes(x)) {
+        assert.equal(tree.contains(x), false);
+      } else {
+        assert.equal(tree.contains(x), true);
+      }
+    }
+  });
+  
+
+
+  it('should pass this test - c', function() {
+    values =  [ 8, 9, 7, -3, 10, -4, -5, -6, 1, -7, 2, -1, 11, -2, 12, 0 ];
+    toDelete = [ 7 ];
+    const tree = rbtree.makeTree();
+    for (let x of values) {
+      tree.put(x, x);
+      assert.equal(tree.isBalanced(), true);
+    }
+  
+    tree.remove(7);    
+    assert.equal(tree.isBalanced(), true);
+    for (let x of values) {
+      if (toDelete.includes(x)) {
+        assert.equal(tree.contains(x), false);
+      } else {
+        assert.equal(tree.contains(x), true);
+      }
+    }
+  });
+  
+  it('should be balanced when it is empty', function() {
+    const tree = rbtree.makeTree();
+    assert.equal(tree.isBalanced(), true);
+  });
+
   check.it('should allow deletion', gen.array(gen.int), gen.array(gen.int), (values, toDelete) => {
     const tree = rbtree.makeTree();
     for (let x of values) {
       tree.put(x, x);
+      assert.equal(tree.isBalanced(), true)
     }
 
     for (let x of toDelete) {
       tree.remove(x);
+      assert.equal(tree.isBalanced(), true);
     }
 
     for (let x of values) {
@@ -242,8 +333,6 @@ describe('rbtree', function() {
       }
     }
   });
-
-
 
   it('should allow deletion during iteration', function() {
     const tree = rbtree.makeTree();
