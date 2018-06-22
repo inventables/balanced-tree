@@ -249,6 +249,18 @@ describe('rbtree', function() {
       }
     }
   });
+  
+  check.it('should maintain the size of the tree', gen.array(gen.int), (values) => {
+    const tree = rbtree.makeTree();
+    count = 0;
+    for (let x of values) {
+      if (!tree.put(x)) {
+        count++;
+      }
+    }
+    
+    assert.equal(tree.size(), count);
+  });
 
   it('should allow deletion during iteration', function() {
     const tree = rbtree.makeTree();
