@@ -1,7 +1,7 @@
 {
   "name": "balanced-tree",
   "description": "Red-Black Tree implementation, as described in Introduction to Algorithms (CLR)",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "dependencies": {},
   "devDependencies": {
     "mocha": "~5.1.1",
