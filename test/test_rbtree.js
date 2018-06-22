@@ -225,6 +225,19 @@ describe('rbtree', function() {
 
     assert.deepEqual([1,2], results);
   });
+  
+  it('should allow stopping and deletion during iteration', function() {
+    const tree = rbtree.makeTree();
+    tree.put(1, 1);
+    tree.put(2, 2);
+
+    tree.forEach((key, value, fns) => {
+      fns.remove();
+      fns.stop();
+    });
+
+    assert.deepEqual({value: 2, key: 2}, tree.head());
+  });
 
   it('should be balanced when it is empty', function() {
     const tree = rbtree.makeTree();
