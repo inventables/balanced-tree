@@ -7,16 +7,61 @@ A Javascript Red-Black-Tree implementation
 
 ### Basic insertion and retrieval
 
-```var tree = rbtree.makeTree();
+```const tree = rbtree.makeTree();
 tree.put(3, 42); // returns false
 tree.put(3, 52); // returns true
 tree.contains(3); // returns true
 tree.get(3); // returns 52
 ```
 
-### Using a custom key types 
 
-If you want to use your own keytypes (i.e., anything with behavior other than the default for `>` and `<`, you'll need to provide a custom comparator. 
+### Iteration
+
+Use `forEach` to iterate through the items in the tree. It takes a function that takes the key and value of each node:
+
+```
+const tree = rbtree.makeTree();
+tree.put(3, 42);
+tree.put(1, 24);
+
+
+tree.forEach((key, value) => console.log(`Key: ${key}, Value: ${value}`))
+
+// Prints:
+//   Key: 1, Value: 24
+//   Key: 3, Value: 42
+```
+
+### Deletion
+
+Use the key to delete items from the tree:
+
+```
+const tree = rbtree.makeTree();
+tree.put(3, 42);
+tree.put(1, 24);
+
+tree.remove(3); // Returns true
+tree.remove(99); // Returns false
+```
+
+You can also delete during iteration using a function given to the `forEach` callback:
+
+```
+const tree = rbtree.makeTree();
+tree.put(3, 42);
+tree.put(1, 24);
+
+tree.forEach((key, value, fns) => {
+  if (key % 3 == 0) {
+    fns.remove();
+  }
+})
+```
+
+### Using a custom key types
+
+If you want to use your own keytypes (i.e., anything with behavior other than the default for `>` and `<`, you'll need to provide a custom comparator.
 
 ```
     var makeKey = function(x) {
@@ -36,12 +81,12 @@ If you want to use your own keytypes (i.e., anything with behavior other than th
 
     var tree = rbtree.makeTree(comparekeys);
     
-    tree.put(makeKey(1), 'A'); 
+    tree.put(makeKey(1), 'A');
 ```
 
 ### Positional functions
 
-You can get the first and last items from a tree. You can also get the predecessor or successor for any given key: 
+You can get the first and last items from a tree. You can also get the predecessor or successor for any given key:
 
 ```
     const included_stuff = [ 1, 2, 3, 4, 5, 6, 7, 8, 9];
@@ -61,18 +106,18 @@ You can get the first and last items from a tree. You can also get the predecess
 
 ## Tests
 
-Run tests with 
+Run tests with
 
 `npm run test`
 
-You can run them continuously with 
+You can run them continuously with
 
 `npm run autotest`
 
 To debug them, put a `debugger;` statement where you'd like to break, then run:
 
 
-`mocha --inspect-brk`. Finally, open up chrome://inspect to debug the tests in the devtools. 
+`mocha --inspect-brk`. Finally, open up chrome://inspect to debug the tests in the devtools.
 
 
 ## Benchmarking
