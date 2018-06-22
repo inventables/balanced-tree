@@ -5,6 +5,8 @@ require('mocha-testcheck').install();
 
 
 describe('rbtree', function() {
+  
+  const mutators = ['put', 'remove'];
 
   it('should return null for an empty tree', function() {
     var tree = rbtree.makeTree();
@@ -250,12 +252,23 @@ describe('rbtree', function() {
     }
   });
   
-  check.it('should maintain the size of the tree', gen.array(gen.int), (values) => {
+  check.it('should maintain the size of the tree',
+    gen.array(gen.int).then((vals) => [vals, gen.array(gen.oneOf(mutators), {size: vals.length})]), (valsAndOps) => {
+
     const tree = rbtree.makeTree();
-    count = 0;
+    let count = 0;
+    const values = valsAndOps[0];
+    const ops = valsAndOps[1];
+    
     for (let x of values) {
-      if (!tree.put(x)) {
-        count++;
+      if (x === 'put') {
+        if (!tree.put(x, x)) {
+          count++;
+        }
+      } else if (x === 'remove') {
+        if (tree.remove(x)) {
+          count--;
+        }
       }
     }
     
