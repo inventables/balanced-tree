@@ -6,7 +6,7 @@
   "bugs": { "url" : "https://github.com/inventables/balanced-tree/issues", "email" : "david@inventables.com" },
   "license" : "EPL-1.0",
   "author": { "name": "David Altenburg", "email": "david@inventables.com"},
-  "version": "0.0.7",
+  "version": "0.0.8",
   "main": "lib/rbtree.js",
   "dependencies": {},
   "devDependencies": {

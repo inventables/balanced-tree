@@ -42,12 +42,24 @@ tree.put(3, "C");
 tree.put(5, "E");
 tree.put(6, "F");
 
-
-tree.forEach((key, value) => console.log(`Key: ${key}, Value: ${value}`))
+tree.forEachNeighbor(4, (key, value, direction, fns) => {
+  if (direction < 0) {
+    console.log(`LEFT neighbor Value: ${value}`)    
+    if (key == 2) {
+      fns.stop();
+    }
+  } else if (direction > 0) {
+    console.log(`RIGHT neighbor Value: ${value}`)    
+    if (key == 5) {
+      fns.stop();
+    }
+  }
+});
 
 // Prints:
-//   Key: 1, Value: 24
-//   Key: 3, Value: 42
+//   LEFT neighbor Value: C
+//   LEFT neighbor Value: B
+//   RIGHT neighbor Value: 5
 ```
 
 ### Deletion
