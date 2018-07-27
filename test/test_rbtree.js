@@ -21,6 +21,14 @@ describe('rbtree', function() {
     assert.equal(42, tree.get(3));
   });
 
+
+  it('should allow item insertion on the condition the item does not exist', function() {
+    var tree = rbtree.makeTree();
+    assert.equal(false, tree.put(3, 42))
+    assert.equal(true, tree.putUnlessPresent(3, 23));
+    assert.equal(42, tree.get(3));
+  });
+
   it('should allow item updates', function() {
     var tree = rbtree.makeTree();
     assert.equal(false, tree.put(3, 42))
@@ -206,6 +214,71 @@ describe('rbtree', function() {
     assert.deepEqual(keys, sorted_stuff);
     assert.deepEqual(values, sorted_stuff);
 
+  });
+  
+  it('should find neighbors if stop is never called', function () {
+    const tree = rbtree.makeTree();
+    for (let i = 0; i < 10; i++) {
+      tree.put(i, i);
+    }
+
+    results = [];
+    
+    tree.forEachNeighbor(4,
+      (key, value, direction, fns) => {
+        var dirsign;
+        if (direction > 0) {
+          dirsign = 1;
+        } else if (direction < 0) {
+          dirsign = -1;
+        } else {
+          dirsign = 0;
+        }
+        results.push([key, dirsign]);
+    });
+
+    assert.deepEqual([
+      [4, 0],
+      [3, -1], [2, -1], [1, -1], [0, -1],
+      [5, 1], [6, 1], [7, 1], [8, 1], [9, 1]],
+      results);
+  });
+  
+  it('should iterate neighbors until stop is called', function () {
+    const tree = rbtree.makeTree();
+    for (let i = 0; i < 10; i++) {
+      tree.put(i, i);
+    }
+
+    results = [];
+    
+    tree.forEachNeighbor(4,
+      (key, value, direction, fns) => {
+        if (direction > 0 && value >= 6) {
+          fns.stop();
+        } else if (direction < 0 && value <= 3) {
+          fns.stop();
+        }
+        results.push(key);
+    });
+
+    assert.deepEqual([4, 3, 5, 6], results);
+  });
+
+  it('should iterate neighbors of elements not present', function () {
+    const tree = rbtree.makeTree();
+    for (let i = 0; i < 5; i++) {
+      tree.put(i, i);
+    }
+
+    results = [];
+    
+    tree.forEachNeighbor(2.5,
+      (key, value, direction, fns) => {
+        results.push(key);
+    });
+
+    assert.deepEqual([2, 1, 0, 3, 4], results);
   });
 
   it('should allow stopping during iteration', function() {
