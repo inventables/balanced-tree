@@ -59,7 +59,7 @@ tree.forEachNeighbor(4, (key, value, direction, fns) => {
 // Prints:
 //   LEFT neighbor Value: C
 //   LEFT neighbor Value: B
-//   RIGHT neighbor Value: 5
+//   RIGHT neighbor Value: E
 ```
 
 ### Deletion
