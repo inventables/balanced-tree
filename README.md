@@ -32,6 +32,24 @@ tree.forEach((key, value) => console.log(`Key: ${key}, Value: ${value}`))
 //   Key: 3, Value: 42
 ```
 
+You can also iterate over the neighbors of a value. It takes a similar function the key, the value, the direction of the neighbor, a function to tell the iterator to stop going in that direction.
+
+```
+const tree = rbtree.makeTree();
+tree.put(1, "A");
+tree.put(2, "B");
+tree.put(3, "C");
+tree.put(5, "E");
+tree.put(6, "F");
+
+
+tree.forEach((key, value) => console.log(`Key: ${key}, Value: ${value}`))
+
+// Prints:
+//   Key: 1, Value: 24
+//   Key: 3, Value: 42
+```
+
 ### Deletion
 
 Use the key to delete items from the tree:
