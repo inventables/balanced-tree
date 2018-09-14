@@ -5,7 +5,7 @@ require('mocha-testcheck').install();
 
 
 describe('rbtree', function() {
-  
+
   const mutators = ['put', 'remove'];
 
   it('should return null for an empty tree', function() {
@@ -215,7 +215,7 @@ describe('rbtree', function() {
     assert.deepEqual(values, sorted_stuff);
 
   });
-  
+
   it('should find neighbors if stop is never called', function () {
     const tree = rbtree.makeTree();
     for (let i = 0; i < 10; i++) {
@@ -223,7 +223,7 @@ describe('rbtree', function() {
     }
 
     results = [];
-    
+
     tree.forEachNeighbor(4,
       (key, value, direction, fns) => {
         var dirsign;
@@ -243,7 +243,32 @@ describe('rbtree', function() {
       [5, 1], [6, 1], [7, 1], [8, 1], [9, 1]],
       results);
   });
-  
+
+  it('should allow removal and stoppage during neighbor iteration', function() {
+    const tree = rbtree.makeTree();
+    for (let i = 0; i < 5; i++) {
+      tree.put(i, i);
+    }
+
+    results = [];
+
+    tree.forEachNeighbor(3,
+      (key, value, direction, fns) => {
+        if (direction < 0) {
+          fns.remove();
+          fns.stop();
+        }
+    });
+
+    tree.forEach((key, value, fns) => {
+      results.push(key);
+    });
+
+    assert.deepEqual([0,1,3,4], results);
+  });
+
+
+
   it('should iterate neighbors until stop is called', function () {
     const tree = rbtree.makeTree();
     for (let i = 0; i < 10; i++) {
@@ -251,7 +276,7 @@ describe('rbtree', function() {
     }
 
     results = [];
-    
+
     tree.forEachNeighbor(4,
       (key, value, direction, fns) => {
         if (direction > 0 && value >= 6) {
@@ -272,7 +297,7 @@ describe('rbtree', function() {
     }
 
     results = [];
-    
+
     tree.forEachNeighbor(2.5,
       (key, value, direction, fns) => {
         results.push(key);
@@ -298,7 +323,7 @@ describe('rbtree', function() {
 
     assert.deepEqual([1,2], results);
   });
-  
+
   it('should allow stopping and deletion during iteration', function() {
     const tree = rbtree.makeTree();
     tree.put(1, 1);
@@ -337,7 +362,7 @@ describe('rbtree', function() {
       }
     }
   });
-  
+
   check.it('should maintain the size of the tree',
     gen.array(gen.int).then((vals) => [vals, gen.array(gen.oneOf(mutators), {size: vals.length})]), (valsAndOps) => {
 
@@ -345,7 +370,7 @@ describe('rbtree', function() {
     let count = 0;
     const values = valsAndOps[0];
     const ops = valsAndOps[1];
-    
+
     for (let x of values) {
       if (x === 'put') {
         if (!tree.put(x, x)) {
@@ -357,7 +382,7 @@ describe('rbtree', function() {
         }
       }
     }
-    
+
     assert.equal(tree.size(), count);
   });
 
