@@ -244,7 +244,7 @@ describe('rbtree', function() {
       results);
   });
 
-  it('should allow removal and stoppage during neighbor iteration', function() {
+  it('should allow removal and stoppage during neighbor iteration going left', function() {
     const tree = rbtree.makeTree();
     for (let i = 0; i < 5; i++) {
       tree.put(i, i);
@@ -267,6 +267,68 @@ describe('rbtree', function() {
     assert.deepEqual([0,1,3,4], results);
   });
 
+  it('should allow removal and stoppage during neighbor iteration going right', function() {
+    const tree = rbtree.makeTree();
+    for (let i = 0; i < 5; i++) {
+      tree.put(i, i);
+    }
+
+    results = [];
+
+    tree.forEachNeighbor(2,
+      (key, value, direction, fns) => {
+        if (direction > 0) {
+          fns.remove();
+          fns.stop();
+        }
+      });
+
+    tree.forEach((key, value, fns) => {
+      results.push(key);
+    });
+
+    assert.deepEqual([0,1,2,4], results);
+  });
+
+  it('should allow us to remove all the nodes', function () {
+    const tree = rbtree.makeTree();
+    for (let i = 0; i < 5; i++) {
+      tree.put(i, i);
+    }
+
+    results = [];
+
+    tree.forEachNeighbor(3,
+      (key, value, direction, fns) => {
+        fns.remove();
+      });
+
+    assert.equal(tree.size(), 0);
+
+  });
+
+  it('should allow removal and stoppage during neighbor iteration at the found node', function() {
+    const tree = rbtree.makeTree();
+    for (let i = 0; i < 5; i++) {
+      tree.put(i, i);
+    }
+
+    results = [];
+
+    tree.forEachNeighbor(3,
+      (key, value, direction, fns) => {
+        fns.remove();
+        fns.stop();
+
+      });
+
+    tree.forEach((key, value, fns) => {
+      results.push(key);
+    });
+
+    assert.deepEqual([0,1,2,4], results);
+
+  });
 
 
   it('should iterate neighbors until stop is called', function () {
@@ -395,11 +457,11 @@ describe('rbtree', function() {
     results = [];
 
     tree.forEach((key, value, fns) => {
-      if (key == 2) {
+      if (key === 2) {
         fns.remove()
-        tree.forEach((key) => { results.push(key); });
       }
-    })
+    });
+    tree.forEach((key) => { results.push(key); });
 
     assert.deepEqual([1,3], results);
   });
