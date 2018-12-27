@@ -89,6 +89,37 @@ tree.forEach((key, value, fns) => {
 })
 ```
 
+Note that the result of the deletion will not be visible until the end of the iteration:
+
+```
+const tree = rbtree.makeTree();
+tree.put(1, 1);
+tree.put(2, 2);
+tree.put(3, 3);
+
+console.log("Starting")
+tree.forEach((key, value, fns) => {
+  if (key === 1) {
+    fns.remove();
+  }
+  console.log("Tree has " + tree.size() + " elements");
+})
+console.log("Done")
+console.log("Finally, tree has " + tree.size() + " elements");
+```
+
+prints:
+
+```
+Starting
+Tree has 3 elements
+Tree has 3 elements
+Tree has 3 elements
+Done
+Finally, tree has 2 elements
+```
+
+
 ### Using a custom key types
 
 If you want to use your own keytypes (i.e., anything with behavior other than the default for `>` and `<`, you'll need to provide a custom comparator.
