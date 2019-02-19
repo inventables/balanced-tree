@@ -113,6 +113,8 @@ describe('rbtree', function() {
       tree.put(x, x);
     }
 
+    console.log(tree.toString());
+
     for (let y of all_stuff) {
       if (included_stuff.includes(y)) {
         assert.equal(tree.contains(y), true);
@@ -120,7 +122,7 @@ describe('rbtree', function() {
         assert.equal(tree.contains(y), false);
       }
     }
-  })
+  });
 
   check.it('should always return the successor', gen.array(gen.int), (values) => {
     const tree = rbtree.makeTree();
