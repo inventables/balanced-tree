@@ -8,80 +8,60 @@ export function makeTree(keyComparator) {
   let size = 0;
 
   if (!keyComparator) {
-    keyComparator = function(a, b) {
-      if (a < b) {
-        return -1;
-      } else if (a > b) {
-        return 1;
-      } else {
-        return 0;
-      }
+    keyComparator = (a, b) => {
+      if (a < b) return -1;
+      if (a > b) return 1;
+      return 0;
     };
   }
 
-  function makeNode(key, val) {
-    return {
-      isNull: false,
-      key: key,
-      val: val,
-      left: null,
-      right: null,
-      parent: null,
-      color: RED
-    }
-  }
+  const makeNode = (key, val) => ({
+    isNull: false,
+    key,
+    val,
+    left: null,
+    right: null,
+    parent: null,
+    color: RED,
+  });
 
-  function findNode(key) {
-    var nextNode;
-    var comparison;
-    var currentNode = root;
+  const findNode = (key) => {
+    let currentNode = root;
 
     if (!currentNode) {
-      return {
-        node: null,
-        direction: null
-      }
+      return { node: null, direction: null };
     }
 
     while (true) {
-      comparison = keyComparator(key, currentNode.key);
+      const comparison = keyComparator(key, currentNode.key);
       if (comparison < 0) {
-        nextNode = currentNode[LEFT];
+        const nextNode = currentNode[LEFT];
         if (!nextNode) {
-          return {
-            node: currentNode,
-            direction: LEFT
-          };
+          return { node: currentNode, direction: LEFT };
         }
+        currentNode = nextNode;
       } else if (comparison > 0) {
-        nextNode = currentNode[RIGHT];
+        const nextNode = currentNode[RIGHT];
         if (!nextNode) {
-          return {
-            node: currentNode,
-            direction: RIGHT
-          }
+          return { node: currentNode, direction: RIGHT };
         }
+        currentNode = nextNode;
       } else {
-        return {
-          node: currentNode,
-          direction: null
-        }
+        return { node: currentNode, direction: null };
       }
-      currentNode = nextNode;
     }
-  }
+  };
 
-  function sucessorNodeForKey(key) {
-    var comparison;
-    var currentNode = root;
-    var candidate = null;
+  const sucessorNodeForKey = (key) => {
+    let currentNode = root;
+    let candidate = null;
 
     if (!currentNode) {
       return null;
     }
 
     while (true) {
-      comparison = keyComparator(key, currentNode.key);
+      const comparison = keyComparator(key, currentNode.key);
       if (comparison >= 0) {
         if (currentNode[RIGHT]) {
           currentNode = currentNode[RIGHT];
@@ -97,19 +77,18 @@ export function makeTree(keyComparator) {
         }
       }
     }
-  }
+  };
 
-  function predecessorNodeForKey(key) {
-    var comparison;
-    var currentNode = root;
-    var candidate = null;
+  const predecessorNodeForKey = (key) => {
+    let currentNode = root;
+    let candidate = null;
 
     if (!currentNode) {
       return null;
     }
 
     while (true) {
-      comparison = keyComparator(key, currentNode.key);
+      const comparison = keyComparator(key, currentNode.key);
       if (comparison <= 0) {
         if (currentNode[LEFT]) {
           currentNode = currentNode[LEFT];
@@ -125,10 +104,10 @@ export function makeTree(keyComparator) {
         }
       }
     }
-  }
+  };
 
-  function maxNode(node) {
-    var currentNode = node;
+  const maxNode = (node) => {
+    let currentNode = node;
     if (!currentNode) {
       return null;
     }
@@ -138,10 +117,10 @@ export function makeTree(keyComparator) {
     }
 
     return currentNode;
-  }
+  };
 
-  function minNode(node) {
-    var currentNode = node;
+  const minNode = (node) => {
+    let currentNode = node;
     if (!currentNode) {
       return null;
     }
@@ -151,19 +130,15 @@ export function makeTree(keyComparator) {
     }
 
     return currentNode;
-  }
+  };
 
-  function firstNode() {
-    return minNode(root);
-  }
+  const firstNode = () => minNode(root);
 
-  function lastNode() {
-    return maxNode(root);
-  }
+  const lastNode = () => maxNode(root);
 
   // Return the inserted node, or null if the key already existed
-  function unbalancedInsert(key, val, checkExistence) {
-    var findResult = findNode(key);
+  const unbalancedInsert = (key, val, checkExistence) => {
+    const findResult = findNode(key);
     if (!findResult.node) {
       root = makeNode(key, val);
       size++;
@@ -171,8 +146,8 @@ export function makeTree(keyComparator) {
     }
 
     if (findResult.direction) {
-      var newNode = makeNode(key, val);
-      var parent = findResult.node;
+      const newNode = makeNode(key, val);
+      const parent = findResult.node;
       parent[findResult.direction] = newNode;
       newNode.parent = parent;
       size++;
@@ -184,10 +159,10 @@ export function makeTree(keyComparator) {
     }
 
     return null;
-  }
+  };
 
-  function leftRotate(x) {
-    var y = x[RIGHT];
+  const leftRotate = (x) => {
+    const y = x[RIGHT];
     x[RIGHT] = y[LEFT];
     if (y[LEFT]) {
       y[LEFT].parent = x;
@@ -205,10 +180,10 @@ export function makeTree(keyComparator) {
     }
     y[LEFT] = x;
     x.parent = y;
-  }
+  };
 
-  function rightRotate(x) {
-    var y = x[LEFT];
+  const rightRotate = (x) => {
+    const y = x[LEFT];
     x[LEFT] = y[RIGHT];
     if (y[RIGHT]) {
       y[RIGHT].parent = x;
@@ -226,19 +201,18 @@ export function makeTree(keyComparator) {
     }
     y[RIGHT] = x;
     x.parent = y;
-  }
+  };
 
-  function balancedInsert(key, val, checkExistence) {
-    var newNode = unbalancedInsert(key, val, checkExistence);
-    var x, y;
+  const balancedInsert = (key, val, checkExistence) => {
+    const newNode = unbalancedInsert(key, val, checkExistence);
+    let x = newNode;
     if (!newNode) {
       return null;
     }
 
-    x = newNode;
     while (x !== root && x.parent.color === RED)  {
       if (x.parent === x.parent.parent[LEFT]) {
-        y = x.parent.parent[RIGHT];
+        const y = x.parent.parent[RIGHT];
         if (y && y.color === RED) {
           y.color = BLACK;
           x.parent.color = BLACK;
@@ -255,7 +229,7 @@ export function makeTree(keyComparator) {
         }
       } else {
         // same as above but with left and right exchanged
-        y = x.parent.parent[LEFT];
+        const y = x.parent.parent[LEFT];
         if (y && y.color === RED) {
           y.color = BLACK;
           x.parent.color = BLACK;
@@ -275,13 +249,13 @@ export function makeTree(keyComparator) {
 
     root.color = BLACK;
     return newNode;
-  }
+  };
 
 
   // See p274 of CLR (1990) for an explanation of this algorithm. This implementation is a little more involved to handle nulls
   // Node may be null
   // Parent is the parent of the deleted node
-  function fixupDeletion(node, parent) {
+  const fixupDeletion = (node, parent) => {
     while (node !== root && (node == null || node.color === BLACK)) {
 
       // Every time we reassign node, we either continue to the next loop iteration or break out of the loop
@@ -366,24 +340,19 @@ export function makeTree(keyComparator) {
     if (node) {
       node.color = BLACK;
     }
-  }
+  };
 
-  function deleteNode(node) {
+  const deleteNode = (node) => {
 
     if (node[LEFT] && node[RIGHT]) {
       // if a node has 2 children, copy its values from the min of the right subtree (which has at most 1 child) and delete that node instead
-      let replacement = minNode(node[RIGHT]);
+      const replacement = minNode(node[RIGHT]);
       node.key = replacement.key;
       node.val = replacement.val;
       node = replacement;
     }
 
-    let child = null;
-    if (node[LEFT]) {
-      child = node[LEFT]
-    } else if (node[RIGHT]) {
-      child = node[RIGHT];
-    }
+    const child = node[LEFT] || node[RIGHT];
 
     if (!node.parent) {
       root = child;
@@ -405,16 +374,15 @@ export function makeTree(keyComparator) {
       fixupDeletion(child, node.parent);
     }
     size--;
-  }
+  };
 
-  function iterateNodes(visit) {
+  const iterateNodes = (visit) => {
     if (!root) { return; }
 
-    let stack = [];
-    let markedForDeletion = [];
+    const stack = [];
+    const markedForDeletion = [];
     let currentNode = root;
     let stopped = false;
-    var right;
 
     while (currentNode || stack.length > 0 && !stopped) {
       if (currentNode) {
@@ -422,24 +390,23 @@ export function makeTree(keyComparator) {
         currentNode = currentNode[LEFT];
       } else {
         currentNode = stack.shift();
-        right = currentNode[RIGHT];
+        const right = currentNode[RIGHT];
         visit(currentNode, {
-          remove: function() { markedForDeletion.push(currentNode) },
-          stop: function() { stopped = true;  },
+          remove: () => markedForDeletion.push(currentNode),
+          stop: () => { stopped = true;  },
         });
         currentNode = right;
       }
     }
 
     markedForDeletion.forEach(deleteNode);
-  }
+  };
 
-  function predecessorNode(node) {
-    var currentNode;
+  const predecessorNode = (node) => {
     if (node === firstNode()) {
       return null;
     } else if (node[LEFT]) {
-      currentNode = node[LEFT];
+      let currentNode = node[LEFT];
       while (currentNode[RIGHT]) {
         currentNode = currentNode[RIGHT];
       }
@@ -447,20 +414,19 @@ export function makeTree(keyComparator) {
     } else if (node === node.parent[RIGHT]) {
       return node.parent;
     } else {
-      currentNode = node.parent;
+      let currentNode = node.parent;
       while (currentNode === currentNode.parent[LEFT]) {
         currentNode = currentNode.parent;
       }
       return currentNode.parent;
     }
-  }
+  };
 
-  function successorNode(node) {
-    var currentNode;
+  const successorNode = (node) => {
     if (node === lastNode()) {
       return null;
     } else if (node[RIGHT]) {
-      currentNode = node[RIGHT];
+      let currentNode = node[RIGHT];
       while (currentNode[LEFT]) {
         currentNode = currentNode[LEFT];
       }
@@ -468,31 +434,31 @@ export function makeTree(keyComparator) {
     } else if (node === node.parent[LEFT]) {
       return node.parent;
     } else {
-      currentNode = node.parent;
+      let currentNode = node.parent;
       while (currentNode === currentNode.parent[RIGHT]) {
         currentNode = currentNode.parent;
       }
       return currentNode.parent;
     }
-  }
+  };
 
-  function iterateNeighborNodes(key, visit) {
-    var reachedLeft = false;
-    var reachedRight = false;
-    var hardStop = false;
-    var currentNode = null;
-    var continuationNode = null;
-    var markedForDeletion = [];
+  const iterateNeighborNodes = (key, visit) => {
+    let reachedLeft = false;
+    let reachedRight = false;
+    let hardStop = false;
+    let currentNode = null;
+    let continuationNode = null;
+    const markedForDeletion = [];
 
-    var findResult = findNode(key);
+    const findResult = findNode(key);
     if (!findResult.node) {
       return;
     }
 
     if (!findResult.direction) {
       visit(findResult.node, 0, {
-        remove: function() { markedForDeletion.push(findResult.node); },
-        stop: function() { hardStop = true; }
+        remove: () => markedForDeletion.push(findResult.node),
+        stop: () => { hardStop = true; }
       });
       currentNode = predecessorNode(findResult.node);
       continuationNode = successorNode(findResult.node);
@@ -507,8 +473,8 @@ export function makeTree(keyComparator) {
     // go left
     while (!hardStop && currentNode && !reachedLeft) {
       visit(currentNode, -1, {
-        remove: function() { markedForDeletion.push(currentNode); },
-        stop: function() { reachedLeft = true; }
+        remove: () => markedForDeletion.push(currentNode),
+        stop: () => { reachedLeft = true; }
       });
       if (!reachedLeft) {
         currentNode = predecessorNode(currentNode);
@@ -519,8 +485,8 @@ export function makeTree(keyComparator) {
     currentNode = continuationNode;
     while (!hardStop && currentNode && !reachedRight) {
       visit(currentNode, 1, {
-        remove: function() { markedForDeletion.push(currentNode); },
-        stop: function() { reachedRight = true; }
+        remove: () => markedForDeletion.push(currentNode),
+        stop: () => { reachedRight = true; }
       });
       if (!reachedRight) {
         currentNode = successorNode(currentNode);
@@ -528,14 +494,14 @@ export function makeTree(keyComparator) {
     }
 
     markedForDeletion.forEach(deleteNode);
-  }
+  };
 
-  function checkRedHasBlackChildren() {
+  const checkRedHasBlackChildren = () => {
     if (!root) { return true; }
-    let stack = [root];
+    const stack = [root];
 
     while (stack.length > 0) {
-      let node = stack.pop();
+      const node = stack.pop();
 
       if (node.color === RED) {
         if (node[LEFT]) {
@@ -555,18 +521,16 @@ export function makeTree(keyComparator) {
       }
     }
     return true;
-  }
+  };
 
-  function checkBlackDepth() {
+  const checkBlackDepth = () => {
     if (!root) { return true; }
 
-    let depths = [];
-    let stack = [[root, root.color === BLACK ? 1 : 0]];
+    const depths = [];
+    const stack = [[root, root.color === BLACK ? 1 : 0]];
 
     while (stack.length > 0) {
-      let next = stack.pop();
-      let node = next[0];
-      let depth = next[1];
+      const [node, depth] = stack.pop();
 
       let leaf = true;
 
@@ -586,30 +550,26 @@ export function makeTree(keyComparator) {
 
     }
 
-    return Math.max.apply(Math, depths) === Math.min.apply(Math, depths);
-  }
+    return Math.max(...depths) === Math.min(...depths);
+  };
 
 
   // Return the public API
   return {
-    put: function(key, val) {
-      return !balancedInsert(key, val);
-    },
+    put: (key, val) => !balancedInsert(key, val),
 
-    putUnlessPresent: function(key, val) {
-      return !balancedInsert(key, val, true);
-    },
+    putUnlessPresent: (key, val) => !balancedInsert(key, val, true),
 
-    get: function(key) {
-      var findResult = findNode(key);
+    get: (key) => {
+      const findResult = findNode(key);
       if (findResult.direction || !findResult.node) {
         return null;
       }
       return findResult.node.val;
     },
 
-    successor: function(key) {
-      var result = sucessorNodeForKey(key);
+    successor: (key) => {
+      const result = sucessorNodeForKey(key);
       if (result) {
         return { key: result.key, value: result.val };
       } else {
@@ -617,8 +577,8 @@ export function makeTree(keyComparator) {
       }
     },
 
-    predecessor: function(key) {
-      var result = predecessorNodeForKey(key);
+    predecessor: (key) => {
+      const result = predecessorNodeForKey(key);
       if (result) {
         return { key: result.key, value: result.val };
       } else {
@@ -626,13 +586,13 @@ export function makeTree(keyComparator) {
       }
     },
 
-    contains: function(key) {
-      var findResult = findNode(key);
+    contains: (key) => {
+      const findResult = findNode(key);
       return Boolean(findResult.node && !findResult.direction);
     },
 
-    head: function() {
-      var result = firstNode();
+    head: () => {
+      const result = firstNode();
       if (result) {
         return { key: result.key, value: result.val };
       } else {
@@ -640,8 +600,8 @@ export function makeTree(keyComparator) {
       }
     },
 
-    tail: function() {
-      var result = lastNode();
+    tail: () => {
+      const result = lastNode();
       if (result) {
         return { key: result.key, value: result.val };
       } else {
@@ -649,16 +609,12 @@ export function makeTree(keyComparator) {
       }
     },
 
-    forEach: function(fn) {
-      iterateNodes(function(node, fns) {fn(node.key, node.val, fns)});
-    },
+    forEach: (fn) => iterateNodes((node, fns) => fn(node.key, node.val, fns)),
 
-    forEachNeighbor: function(key, fn) {
-      iterateNeighborNodes(key, function (node, direction, fns) {fn(node.key, node.val, direction, fns)});
-    },
+    forEachNeighbor: (key, fn) => iterateNeighborNodes(key, (node, direction, fns) => fn(node.key, node.val, direction, fns)),
 
-    remove: function(key) {
-      var findResult = findNode(key);
+    remove: (key) => {
+      const findResult = findNode(key);
       if (findResult.node && !findResult.direction) {
         deleteNode(findResult.node);
         return true;
@@ -667,12 +623,8 @@ export function makeTree(keyComparator) {
       }
     },
 
-    size: function() {
-      return size;
-    },
+    size: () => size,
 
-    isBalanced: function () {
-      return checkBlackDepth() && checkRedHasBlackChildren();
-    }
-  }
+    isBalanced: () => checkBlackDepth() && checkRedHasBlackChildren(),
+  };
 }
