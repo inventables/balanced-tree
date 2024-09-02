@@ -1,5 +1,5 @@
 const assert = require('assert');
-const rbtree = require('../lib/rbtree.js');
+const rbtree = require('../src/rbtree.js');
 const { gen } = require('testcheck');
 require('mocha-testcheck').install();
 

@@ -7,7 +7,7 @@
   "license" : "EPL-1.0",
   "author": { "name": "David Altenburg", "email": "david@inventables.com"},
   "version": "0.0.11",
-  "main": "lib/rbtree.js",
+  "main": "src/rbtree.js",
   "dependencies": {},
   "devDependencies": {
     "mocha": "~10.2.0",
